@@ -14,7 +14,9 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->count(15)->create();
+        User::factory()->count(15)->create([
+            'password' => Hash::make('user-password'),
+        ]);
 
         User::factory()->count(2)->create([
             'role' => 'office',

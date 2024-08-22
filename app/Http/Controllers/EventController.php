@@ -35,7 +35,24 @@ class EventController extends Controller
         ]);
     }
 
-    public function storeOrUpdate(Request $request, Event $event = null)
+    public function store(Request $request)
+    {
+        $validator = $this->validateEvent($request);
+
+        if ($validator->fails()) {
+            return $this->validationErrorResponse($validator);
+        }
+
+        $event = $this->saveEvent($request);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => $event->wasRecentlyCreated ? 'Event created successfully' : 'Event updated successfully',
+            'event' => $event
+        ]);
+    }
+
+    public function update(Request $request, Event $event)
     {
         $validator = $this->validateEvent($request);
 
@@ -47,7 +64,7 @@ class EventController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => $event->wasRecentlyCreated ? 'Event created successfully' : 'Event updated successfully',
+            'message' => 'Event updated successfully',
             'event' => $event
         ]);
     }
